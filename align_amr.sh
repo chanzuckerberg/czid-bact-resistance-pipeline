@@ -1,5 +1,5 @@
 #!/bin/sh
-# arguments: project_id, sample_id, output_dir, min_coverage, n_threads
+# Arguments: project_id, sample_id, output_dir, min_coverage, n_threads
 PROJECT_ID=$1
 SAMPLE_ID=$2
 OUTPUT_DIR=$3
@@ -11,12 +11,10 @@ echo $OUTPUT_DIR
 echo $MIN_COVERAGE
 echo $N_THREADS
 aws s3 cp --recursive s3://idseq-samples-prod/samples/$PROJECT_ID/$SAMPLE_ID/fastqs/ $OUTPUT_DIR
-#inputFiles = ($OUTPUT_DIR/*)
 INPUT=""
 space=" "
 for file in $OUTPUT_DIR/*
 do
-	# TODO: check
 	INPUT=$INPUT$file$space
 done
 
