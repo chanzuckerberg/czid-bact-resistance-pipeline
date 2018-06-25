@@ -1,15 +1,50 @@
 #!/bin/sh
 # Arguments: project_id, sample_id, output_dir, min_coverage, n_threads
-PROJECT_ID=$1
-SAMPLE_ID=$2
-OUTPUT_DIR=$3
-MIN_COVERAGE=$4
-N_THREADS=$5
-echo $PROJECT_ID
-echo $SAMPLE_ID
-echo $OUTPUT_DIR
-echo $MIN_COVERAGE
-echo $N_THREADS
+echo "All the following flags must be provided: --project_id, --sample_id, --output_dir,
+--min_coverage, and --n_threads"
+
+while [[ $# -gt 0 ]];
+do
+key="$1"
+
+case $key in
+	-p|--project_id)
+	PROJECT_ID="$2"
+	shift #past argument
+	shift #past value
+	;;
+	-s|--sample_id)
+	SAMPLE_ID="$2"
+	shift
+	shift
+	;;
+	-o|--output_dir)
+	OUTPUT_DIR="$2"
+	shift
+	shift
+	;;
+	-m|--min_coverage)
+	MIN_COVERAGE="$2"
+	shift
+	shift
+	;;
+	-n|--n_threads)
+	N_THREADS="$2"
+	shift
+	shift
+	;;
+	*)
+	shift # past argument
+	;;
+esac
+done
+
+echo PROJECT ID = $PROJECT_ID
+echo SAMPLE ID = $SAMPLE_ID
+echo OUTPUT DIR = $OUTPUT_DIR
+echo MIN COVERAGE = $MIN_COVERAGE
+echo N THREADS = $N_THREADS	
+
 aws s3 cp --recursive s3://idseq-samples-prod/samples/$PROJECT_ID/$SAMPLE_ID/fastqs/ $OUTPUT_DIR
 INPUT=""
 space=" "
