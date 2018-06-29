@@ -39,11 +39,11 @@ case $key in
 esac
 done
 
-echo PROJECT ID = $PROJECT_ID
-echo SAMPLE ID = $SAMPLE_ID
-echo OUTPUT DIR = $OUTPUT_DIR
-echo MIN COVERAGE = $MIN_COVERAGE
-echo N THREADS = $N_THREADS	
+echo PROJECT ID = $PROJECT_ID > /dev/stderr
+echo SAMPLE ID = $SAMPLE_ID > /dev/stderr
+echo OUTPUT DIR = $OUTPUT_DIR > /dev/stderr
+echo MIN COVERAGE = $MIN_COVERAGE > /dev/stderr
+echo N THREADS = $N_THREADS	> /dev/stderr
 
 aws s3 cp --recursive s3://idseq-samples-prod/samples/$PROJECT_ID/$SAMPLE_ID/fastqs/ $OUTPUT_DIR
 INPUT=""
@@ -51,14 +51,17 @@ space=" "
 for file in $OUTPUT_DIR/*
 do
 	INPUT=$INPUT$file$space
+	echo INPUT > /dev/stderr
 done
 
-echo "Input command to srst2: "
+echo "Input command to srst2: " > /dev/stderr
 echo $INPUT
 output="_output/"
 #outputdir2="s3://idseq-database/test/AMR/"$SAMPLE_ID
 outputdir2="s3://msrinivasan-czbiohub-reflow-quickstart-cache/"$SAMPLE_ID
 mkdir $SAMPLE_ID$output
+echo "made dir " > /dev/stderr
 srst2 --input_pe $INPUT --forward 001 --reverse 002 --min_coverage $MIN_COVERAGE --threads $N_THREADS --output $SAMPLE_ID$output  --log --gene_db ~/miniconda3/bin/srst2/data/ARGannot_r2.fasta
+echo "ran srst2" > /dev/stderr
 aws s3 cp $SAMPLE_ID$output  s3://idseq-database/test/AMR/$SAMPLE_ID --recursive
 rm -r $SAMPLE_ID$output
