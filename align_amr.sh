@@ -56,7 +56,8 @@ done
 echo "Input command to srst2: "
 echo $INPUT
 output="_output/"
-outputdir2="s3://idseq-database/test/AMR/"$SAMPLE_ID
+#outputdir2="s3://idseq-database/test/AMR/"$SAMPLE_ID
+outputdir2="s3://msrinivasan-czbiohub-reflow-quickstart-cache/"$SAMPLE_ID
 mkdir $SAMPLE_ID$output
 srst2 --input_pe $INPUT --forward 001 --reverse 002 --min_coverage $MIN_COVERAGE --threads $N_THREADS --output $SAMPLE_ID$output  --log --gene_db ~/miniconda3/bin/srst2/data/ARGannot_r2.fasta
 aws s3 cp $SAMPLE_ID$output  s3://idseq-database/test/AMR/$SAMPLE_ID --recursive
