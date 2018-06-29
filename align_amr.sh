@@ -2,7 +2,7 @@
 # Arguments: project_id, sample_id, output_dir, min_coverage, n_threads
 echo "All the following flags must be provided: --project_id, --sample_id, --output_dir,
 --min_coverage, and --n_threads"
-
+echo "at start" > /dev/stderr
 while [[ $# -gt 0 ]];
 do
 key="$1"
