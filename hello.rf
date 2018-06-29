@@ -1,0 +1,16 @@
+// Name of the docker image to use, i.e. this docker image is located
+// at https://hub.docker.com/r/estrain/srst2/
+val srst2 = "estrain/srst2"
+
+// Compute a srst2 alignment
+func hello(test int) = 
+exec(image := srst2, mem := 4*GiB, cpu := 2) (out file) {"
+		wget 'https://raw.githubusercontent.com/chanzuckerberg/idseq-bact-resistance-pipeline/meera-master/hello.sh' > {{out}}
+		sh hello.sh > {{out}}
+"}
+// jhdddd hhjj
+val files = make("$/files")
+val output_signature = "s3://msrinivasan-czbiohub-reflow-quickstart-cache/"
+// val signature = hello(5)
+// val Main = files.Copy(signature, output_signature)
+val Main = hello(5)
