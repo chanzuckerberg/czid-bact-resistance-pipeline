@@ -1,0 +1,23 @@
+// Name of the docker image to use, i.e. this docker image is located
+// at https://hub.docker.com/r/estrain/srst2/
+val srst2 = "estrain/srst2"
+
+func Srst2Align(sample1 file, sample2 file, db file) = 
+	exec(image := srst2, mem := 4*GiB, cpu := 2) (srst2_output file) {"
+			mv {{sample1}} R1_001.fastq.gz
+			mv {{sample2}} R2_001.fastq.gz
+			mv {{db}} ARGannot_r2.fasta
+			srst2 --input_pe R1_001.fastq.gz R2_001.fastq.gz --forward 001 --reverse 001 --min_coverage 0 --threads 16 --output output --log --gene_db ARGannot_r2.fasta
+			cp output__fullgenes__ARGannot_r2__results.txt {{srst2_output}}
+"}
+
+val sample1 = file("s3://msrinivasan-czbiohub-reflow-quickstart-cache/AMR_TR-DNA-NOVA042518_2-pst_S113_R1_001.fastq.gz")
+val sample2 = file("s3://msrinivasan-czbiohub-reflow-quickstart-cache/AMR_TR-DNA-NOVA042518_2-pst_S113_R2_001.fastq.gz") 
+val db = file("s3://msrinivasan-czbiohub-reflow-quickstart-cache/ARGannot_r2.fasta")
+val output_dest = "s3://msrinivasan-czbiohub-reflow-quickstart-cache/srst2_output_final_from_rewritten6_2.txt"
+
+val output = Srst2Align(sample1, sample2, db)
+val files = make("$/files")
+
+// aabcdeffgghhiijjkkllkkll
+val Main = files.Copy(output, output_dest)
