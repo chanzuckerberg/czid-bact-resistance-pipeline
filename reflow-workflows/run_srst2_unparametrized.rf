@@ -19,5 +19,4 @@ val output_dest = "s3://msrinivasan-czbiohub-reflow-quickstart-cache/srst2_outpu
 val output = Srst2Align(sample1, sample2, db)
 val files = make("$/files")
 
-// aabcdeffgghhiijjkkllkkllkk
 val Main = files.Copy(output, output_dest)
