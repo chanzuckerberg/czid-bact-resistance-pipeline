@@ -5,14 +5,14 @@ param(
 	// S3 path to reverse read of fastq file
 	rev_read string
 	
+	// S3 path to output destination for results file
+	output_path string
+
 	// S3 path to db to compare to, default is ARGannot_r2
 	db_path="s3://msrinivasan-czbiohub-reflow-quickstart-cache/ARGannot_r2.fasta"
 
 	// name of database being used, default is ARGannot_r2.
 	db_name="ARGannot_r2"
-
-	// S3 path to output destination for results file
-	output_path string
 
 	// Prefix for name of results file, default output
 	output_prefix = "output"
