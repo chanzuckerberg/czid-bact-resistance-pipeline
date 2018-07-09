@@ -1,0 +1,44 @@
+param(
+	// S3 path to forward read of fastq file
+	fwd_read string
+	
+	// S3 path to reverse read of fastq file
+	rev_read string
+	
+	// S3 path to db to compare to, default is ARGannot_r2
+	database string
+
+	// S3 path to output destination for results file
+	output_path string
+
+	// Prefix for name of results file, default output
+	output_prefix = "output"
+
+	// min-coverage, default 0
+	cov = 0
+	
+	// threads, default 16
+	n_threads = 16
+)
+
+// Name of the docker image to use, i.e. this docker image is located
+// at https://hub.docker.com/r/estrain/srst2/
+val srst2 = "estrain/srst2"
+
+func Srst2Align(fwd_read file, rev_read file, db file) = 
+	exec(image := srst2, mem := 4*GiB, cpu := 2) (srst2_output file) {"
+			mv {{fwd_read}} R1_001.fastq.gz
+			mv {{rev_read}} R2_001.fastq.gz
+			mv {{db}} ARGannot_r2.fasta # TODO: parameterize rename
+			srst2 --input_pe R1_001.fastq.gz R2_001.fastq.gz --forward 001 --reverse 001 --min_coverage {{cov}} --threads {{n_threads}} --output {{output_prefix}} --log --gene_db ARGannot_r2.fasta
+			cp output__fullgenes__ARGannot_r2__results.txt {{srst2_output}}
+"}
+
+val fwd_rd = file(fwd_read)
+val rev_rd = file(rev_read) 
+val db = file(database)
+
+val srst2_results = Srst2Align(fwd_rd, rev_rd, db)
+val files = make("$/files")
+
+val Main = files.Copy(srst2_results, output_path)
