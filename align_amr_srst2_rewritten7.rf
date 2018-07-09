@@ -6,7 +6,10 @@ param(
 	rev_read string
 	
 	// S3 path to db to compare to, default is ARGannot_r2
-	database string
+	db_path="s3://msrinivasan-czbiohub-reflow-quickstart-cache/ARGannot_r2.fasta"
+
+	// name of database being used, default is ARGannot_r2.
+	db_name="ARGannot_r2"
 
 	// S3 path to output destination for results file
 	output_path string
@@ -29,16 +32,16 @@ func Srst2Align(fwd_read file, rev_read file, db file) =
 	exec(image := srst2, mem := 4*GiB, cpu := 2) (srst2_output file) {"
 			mv {{fwd_read}} R1_001.fastq.gz
 			mv {{rev_read}} R2_001.fastq.gz
-			mv {{db}} ARGannot_r2.fasta # TODO: parameterize rename
-			srst2 --input_pe R1_001.fastq.gz R2_001.fastq.gz --forward 001 --reverse 001 --min_coverage {{cov}} --threads {{n_threads}} --output {{output_prefix}} --log --gene_db ARGannot_r2.fasta
-			cp output__fullgenes__ARGannot_r2__results.txt {{srst2_output}}
+			mv {{db}} {{db_name}} # TODO: parameterize rename
+			srst2 --input_pe R1_001.fastq.gz R2_001.fastq.gz --forward 001 --reverse 001 --min_coverage {{cov}} --threads {{n_threads}} --output {{output_prefix}} --log --gene_db {{db_name}}
+			cp output__fullgenes__{{db_name}}__results.txt {{srst2_output}}
 "}
 
 val fwd_rd = file(fwd_read)
 val rev_rd = file(rev_read) 
-val db = file(database)
+val db = file(db_path)
 
-val srst2_results = Srst2Align(fwd_rd, rev_rd, db)
+val srst2_fullgenes_results = Srst2Align(fwd_rd, rev_rd, db)
 val files = make("$/files")
-
-val Main = files.Copy(srst2_results, output_path)
+//abcd
+val Main = files.Copy(srst2_fullgenes_results, output_path)
