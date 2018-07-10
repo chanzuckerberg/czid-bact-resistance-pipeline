@@ -1,0 +1,3 @@
+id,fwd_read,rev_read,output_path
+4122,s3://msrinivasan-czbiohub-reflow-quickstart-cache/project_64/4122/fastqs/AMR_TR-DNA-NOVA1-07-pst_S70_R1_001.fastq.gz,s3://msrinivasan-czbiohub-reflow-quickstart-cache/project_64/4122/fastqs/AMR_TR-DNA-NOVA1-07-pst_S70_R2_001.fastq.gz,s3://msrinivasan-czbiohub-reflow-quickstart-cache/test_amr/output_4122/
+4123,s3://msrinivasan-czbiohub-reflow-quickstart-cache/project_64/4123/fastqs/AMR_TR-DNA-NOVA1-08-30d_S73_R1_001.fastq.gz,s3://msrinivasan-czbiohub-reflow-quickstart-cache/project_64/4123/fastqs/AMR_TR-DNA-NOVA1-08-30d_S73_R2_001.fastq.gz,s3://msrinivasan-czbiohub-reflow-quickstart-cache/test_amr/output_4123/
